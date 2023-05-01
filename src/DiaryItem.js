@@ -1,5 +1,5 @@
 const DiaryItem = ({
-  onDelete,
+  onRemove,
   author,
   content,
   emotion,
@@ -16,7 +16,7 @@ const DiaryItem = ({
         <span className='date'>{new Date(created_date).toLocaleString()}</span>
       </div>
       <div className='content'>{content}</div>
-      <button onClick={() => onDelete(id)}>삭제하기</button>
+      <button onClick={() => onRemove(id)}>삭제하기</button>
     </div>
   );
 };

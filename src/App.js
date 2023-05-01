@@ -20,7 +20,7 @@ function App() {
     ]);
   };
 
-  const onDelete = (targetId) => {
+  const onRemove = (targetId) => {
     console.log(`${targetId}번째 일기를 삭제합니다.`);
     let newDataList = data.filter((elem) => elem.id !== targetId);
     setData(newDataList);
@@ -30,7 +30,7 @@ function App() {
     <div className='App'>
       <h2>일기장</h2>
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diaryList={data} onDelete={onDelete} />
+      <DiaryList diaryList={data} onRemove={onRemove} />
     </div>
   );
 }
