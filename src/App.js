@@ -4,30 +4,6 @@ import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 
-// const dummyList = [
-//   {
-//     id: 1,
-//     author: '조수진',
-//     content: '하이~',
-//     emotion: 2,
-//     created_date: new Date().getTime(),
-//   },
-//   {
-//     id: 2,
-//     author: '조수진',
-//     content: '하이2~',
-//     emotion: 2,
-//     created_date: new Date().getTime(),
-//   },
-//   {
-//     id: 3,
-//     author: '조수진',
-//     content: '하이3~',
-//     emotion: 2,
-//     created_date: new Date().getTime(),
-//   },
-// ];
-
 function App() {
   const [data, setData] = useState([]); // data : 일기 리스트
 
@@ -35,7 +11,7 @@ function App() {
     setData([
       ...data,
       {
-        id: data.length + 1,
+        id: data.length,
         author: author,
         content: content,
         emotion: emotion,
@@ -44,11 +20,17 @@ function App() {
     ]);
   };
 
+  const onDelete = (targetId) => {
+    console.log(`${targetId}번째 일기를 삭제합니다.`);
+    let newDataList = data.filter((elem) => elem.id !== targetId);
+    setData(newDataList);
+  };
+
   return (
     <div className='App'>
       <h2>일기장</h2>
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diaryList={data} />
+      <DiaryList diaryList={data} onDelete={onDelete} />
     </div>
   );
 }
