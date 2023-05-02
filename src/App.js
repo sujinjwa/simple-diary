@@ -26,11 +26,19 @@ function App() {
     setData(newDataList);
   };
 
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((elem) =>
+        elem.id === targetId ? { ...elem, content: newContent } : elem
+      )
+    );
+  };
+
   return (
     <div className='App'>
       <h2>일기장</h2>
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList diaryList={data} onRemove={onRemove} />
+      <DiaryList diaryList={data} onRemove={onRemove} onEdit={onEdit} />
     </div>
   );
 }
