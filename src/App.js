@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
+import Lifecycle from './LifeCycle';
 
 function App() {
   const [data, setData] = useState([]); // data : 일기 리스트
@@ -36,6 +37,7 @@ function App() {
 
   return (
     <div className='App'>
+      <Lifecycle />
       <h2>일기장</h2>
       <DiaryEditor onCreate={onCreate} />
       <DiaryList diaryList={data} onRemove={onRemove} onEdit={onEdit} />
