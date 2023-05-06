@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
+import OptimizeTest from './OptimizeTest';
 
 function App() {
   const [data, setData] = useState([]); // data : 일기 리스트
@@ -62,7 +63,6 @@ function App() {
   };
 
   const getDiaryAnalysis = useMemo(() => {
-    console.log('memoization!');
     const goodCount = data.filter((elem) => elem.emotion >= 3).length;
     const badCount = data.length - goodCount;
     const goodRate = (goodCount / data.length) * 100;
@@ -74,6 +74,7 @@ function App() {
 
   return (
     <div className='App'>
+      <OptimizeTest />
       <h2>일기장</h2>
       <DiaryEditor onCreate={onCreate} />
       <div>
