@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
-import OptimizeTest from './OptimizeTest';
 
 function App() {
   const [data, setData] = useState([]); // data : 일기 리스트
@@ -34,19 +33,17 @@ function App() {
     getData();
   }, []);
 
-  const onCreate = (author, content, emotion, date) => {
+  const onCreate = useCallback((author, content, emotion, date) => {
+    const newItem = {
+      id: dataId.current,
+      author: author, // author 로만 표기 가능
+      content: content, // content 로만 표기 가능
+      emotion: emotion, // emotion 으로만 표기 가능
+      created_date: date,
+    };
     dataId.current += 1;
-    setData([
-      ...data,
-      {
-        id: dataId.current,
-        author: author,
-        content: content,
-        emotion: emotion,
-        created_date: date,
-      },
-    ]);
-  };
+    setData((data) => [newItem, ...data]);
+  }, []);
 
   const onRemove = (targetId) => {
     console.log(`${targetId}번째 일기를 삭제합니다.`);
@@ -74,7 +71,6 @@ function App() {
 
   return (
     <div className='App'>
-      <OptimizeTest />
       <h2>일기장</h2>
       <DiaryEditor onCreate={onCreate} />
       <div>
