@@ -1,11 +1,48 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  useReducer,
+} from 'react';
 
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'INIT': {
+      return action.data;
+    }
+    case 'CREATE': {
+      const created_date = new Date().getTime();
+      const newItem = {
+        ...action.data,
+        created_date,
+      };
+
+      return [newItem, ...state];
+    }
+    case 'REMOVE': {
+      return state.filter((elem) => elem.id !== action.targetId);
+    }
+    case 'EDIT': {
+      return state.map((elem) =>
+        elem === action.targetId
+          ? { ...elem, content: action.newContent }
+          : elem
+      );
+    }
+    default:
+      return state;
+  }
+};
+
 function App() {
-  const [data, setData] = useState([]); // data : 일기 리스트
+  // const [data, setData] = useState([]); // data : 일기 리스트
+  const [data, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(0);
 
@@ -25,7 +62,8 @@ function App() {
       };
     });
 
-    setData(initData);
+    dispatch({ type: 'INIT', data: initData });
+    // setData(initData);
   };
 
   useEffect(() => {
@@ -33,29 +71,38 @@ function App() {
     getData();
   }, []);
 
-  const onCreate = useCallback((author, content, emotion, date) => {
-    const newItem = {
-      id: dataId.current,
-      author: author, // author 로만 표기 가능
-      content: content, // content 로만 표기 가능
-      emotion: emotion, // emotion 으로만 표기 가능
-      created_date: date,
-    };
+  const onCreate = useCallback((author, content, emotion) => {
+    // const newItem = {
+    //   id: dataId.current,
+    //   author: author, // author 로만 표기 가능
+    //   content: content, // content 로만 표기 가능
+    //   emotion: emotion, // emotion 으로만 표기 가능
+    //   created_date: date,
+    // };
+
+    dispatch({
+      type: 'CREATE',
+      data: { author, content, emotion, id: dataId.current },
+    });
     dataId.current += 1;
-    setData((data) => [newItem, ...data]);
+
+    //setData((data) => [newItem, ...data]);
   }, []);
 
   const onRemove = useCallback((targetId) => {
     console.log(`${targetId}번째 일기를 삭제합니다.`);
-    setData((data) => data.filter((elem) => elem.id !== targetId));
+
+    dispatch({ type: 'REMOVE', targetId });
+    // setData((data) => data.filter((elem) => elem.id !== targetId));
   }, []);
 
   const onEdit = useCallback((targetId, newContent) => {
-    setData((data) =>
-      data.map((elem) =>
-        elem.id === targetId ? { ...elem, content: newContent } : elem
-      )
-    );
+    dispatch({ type: 'EDIT', targetId, newContent });
+    // setData((data) =>
+    //   data.map((elem) =>
+    //     elem.id === targetId ? { ...elem, content: newContent } : elem
+    //   )
+    // );
   }, []);
 
   const getDiaryAnalysis = useMemo(() => {
