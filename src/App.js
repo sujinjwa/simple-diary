@@ -33,7 +33,7 @@ const reducer = (state, action) => {
     }
     case 'EDIT': {
       return state.map((elem) =>
-        elem === action.targetId
+        elem.id === action.targetId
           ? { ...elem, content: action.newContent }
           : elem
       );
