@@ -45,19 +45,18 @@ function App() {
     setData((data) => [newItem, ...data]);
   }, []);
 
-  const onRemove = (targetId) => {
+  const onRemove = useCallback((targetId) => {
     console.log(`${targetId}번째 일기를 삭제합니다.`);
-    let newDataList = data.filter((elem) => elem.id !== targetId);
-    setData(newDataList);
-  };
+    setData((data) => data.filter((elem) => elem.id !== targetId));
+  }, []);
 
-  const onEdit = (targetId, newContent) => {
-    setData(
+  const onEdit = useCallback((targetId, newContent) => {
+    setData((data) =>
       data.map((elem) =>
         elem.id === targetId ? { ...elem, content: newContent } : elem
       )
     );
-  };
+  }, []);
 
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = data.filter((elem) => elem.emotion >= 3).length;
