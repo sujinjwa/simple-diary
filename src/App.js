@@ -41,12 +41,10 @@ const reducer = (state, action) => {
 };
 
 function App() {
-  // const [data, setData] = useState([]); // data : 일기 리스트
   const [data, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(0);
 
-  // 프로미스를 반환하는 비동기 함수
   const getData = async () => {
     const res = await fetch(
       'https://jsonplaceholder.typicode.com/comments'
@@ -63,7 +61,6 @@ function App() {
     });
 
     dispatch({ type: 'INIT', data: initData });
-    // setData(initData);
   };
 
   useEffect(() => {
@@ -72,37 +69,19 @@ function App() {
   }, []);
 
   const onCreate = useCallback((author, content, emotion) => {
-    // const newItem = {
-    //   id: dataId.current,
-    //   author: author, // author 로만 표기 가능
-    //   content: content, // content 로만 표기 가능
-    //   emotion: emotion, // emotion 으로만 표기 가능
-    //   created_date: date,
-    // };
-
     dispatch({
       type: 'CREATE',
       data: { author, content, emotion, id: dataId.current },
     });
     dataId.current += 1;
-
-    //setData((data) => [newItem, ...data]);
   }, []);
 
   const onRemove = useCallback((targetId) => {
-    console.log(`${targetId}번째 일기를 삭제합니다.`);
-
     dispatch({ type: 'REMOVE', targetId });
-    // setData((data) => data.filter((elem) => elem.id !== targetId));
   }, []);
 
   const onEdit = useCallback((targetId, newContent) => {
     dispatch({ type: 'EDIT', targetId, newContent });
-    // setData((data) =>
-    //   data.map((elem) =>
-    //     elem.id === targetId ? { ...elem, content: newContent } : elem
-    //   )
-    // );
   }, []);
 
   const getDiaryAnalysis = useMemo(() => {
